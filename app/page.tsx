@@ -2,6 +2,7 @@ import Link from "next/link";
 import { HeroSection } from "@/components/HeroSection";
 import { ConceptSection } from "@/components/ConceptSection";
 import { FeaturedProducts } from "@/components/FeaturedProducts";
+import { UgcReviewsSection } from "@/components/UgcReviewsSection";
 import { SocialGallerySection } from "@/components/SocialGallerySection";
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <HeroSection />
       <ConceptSection />
       <FeaturedProducts />
+      <UgcReviewsSection isFullSection />
       <SocialGallerySection />
 
       {/* フッター */}

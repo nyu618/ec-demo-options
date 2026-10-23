@@ -227,7 +227,7 @@ export function DemoSettingsPanel() {
                     </span>
                   </div>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    商品詳細ページ下部に購入者のInstagram投稿レビューを表示します
+                    トップページおよび商品詳細ページに購入者のInstagram投稿レビューを表示します
                   </p>
                 </div>
 
