@@ -6,15 +6,23 @@ interface DemoOptionsContextType {
   isChatbotEnabled: boolean;
   setIsChatbotEnabled: (enabled: boolean) => void;
   toggleChatbot: () => void;
+  isSearchEnabled: boolean;
+  setIsSearchEnabled: (enabled: boolean) => void;
+  toggleSearch: () => void;
 }
 
 const DemoOptionsContext = createContext<DemoOptionsContextType | undefined>(undefined);
 
 export function DemoOptionsProvider({ children }: { children: ReactNode }) {
   const [isChatbotEnabled, setIsChatbotEnabled] = useState<boolean>(false);
+  const [isSearchEnabled, setIsSearchEnabled] = useState<boolean>(false);
 
   const toggleChatbot = useCallback(() => {
     setIsChatbotEnabled((prev) => !prev);
+  }, []);
+
+  const toggleSearch = useCallback(() => {
+    setIsSearchEnabled((prev) => !prev);
   }, []);
 
   return (
@@ -23,6 +31,9 @@ export function DemoOptionsProvider({ children }: { children: ReactNode }) {
         isChatbotEnabled,
         setIsChatbotEnabled,
         toggleChatbot,
+        isSearchEnabled,
+        setIsSearchEnabled,
+        toggleSearch,
       }}
     >
       {children}

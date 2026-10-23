@@ -16,7 +16,8 @@ export const products: Product[] = [
       { type: "サイズ", options: ["S", "M", "L", "XL"] },
       { type: "カラー", options: ["ブラック", "グレー"] }
     ],
-    featured: true
+    featured: true,
+    isNew: true
   },
   {
     id: "2",
@@ -34,7 +35,8 @@ export const products: Product[] = [
       { type: "サイズ", options: ["XS", "S", "M", "L", "XL"] },
       { type: "カラー", options: ["ホワイト", "ブラック", "ベージュ"] }
     ],
-    featured: true
+    featured: true,
+    isNew: false
   },
   {
     id: "3",
@@ -49,7 +51,8 @@ export const products: Product[] = [
     variants: [
       { type: "サイズ", options: ["S", "M", "L"] }
     ],
-    featured: true
+    featured: true,
+    isNew: false
   },
   {
     id: "4",
@@ -63,7 +66,8 @@ export const products: Product[] = [
     ],
     variants: [
     ],
-    featured: true
+    featured: true,
+    isNew: false
   },
   {
     id: "5",
@@ -80,7 +84,8 @@ export const products: Product[] = [
       { type: "サイズ", options: ["S", "M", "L", "XL"] },
       { type: "カラー", options: ["チャコール", "ボルドー"] }
     ],
-    featured: false
+    featured: false,
+    isNew: true
   },
   {
     id: "6",
@@ -95,6 +100,7 @@ export const products: Product[] = [
     variants: [
       { type: "サイズ", options: ["S", "M", "L", "XL"] }
     ],
-    featured: false
+    featured: false,
+    isNew: true
   }
 ];

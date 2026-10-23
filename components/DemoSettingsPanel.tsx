@@ -6,8 +6,15 @@ import { useDemoOptions } from "@/context/DemoOptionsContext";
 
 export function DemoSettingsPanel() {
   const [isOpen, setIsOpen] = useState(false);
-  const { isChatbotEnabled, toggleChatbot } = useDemoOptions();
+  const {
+    isChatbotEnabled,
+    toggleChatbot,
+    isSearchEnabled,
+    toggleSearch,
+  } = useDemoOptions();
   const panelRef = useRef<HTMLDivElement>(null);
+
+  const hasActiveOptions = isChatbotEnabled || isSearchEnabled;
 
   // パネル外クリックで閉じる
   useEffect(() => {
@@ -73,8 +80,9 @@ export function DemoSettingsPanel() {
             </div>
 
             {/* オプションリスト */}
-            <div className="p-5 space-y-4">
-              <div className="flex items-center justify-between gap-4">
+            <div className="p-5 divide-y divide-gray-100">
+              {/* オプション1: AIチャットボット機能 */}
+              <div className="flex items-center justify-between gap-4 pb-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-gray-900">
@@ -109,6 +117,47 @@ export function DemoSettingsPanel() {
                   <span
                     className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
                       isChatbotEnabled ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {/* オプション2: 商品検索機能 */}
+              <div className="flex items-center justify-between gap-4 pt-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-900">
+                      商品検索機能
+                    </span>
+                    <span
+                      className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${
+                        isSearchEnabled
+                          ? "bg-gray-900 text-white"
+                          : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
+                      {isSearchEnabled ? "ON" : "OFF"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                    商品一覧の上部に検索バーとカテゴリ絞り込みUIを表示します
+                  </p>
+                </div>
+
+                {/* トグルスイッチ */}
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={isSearchEnabled}
+                  aria-label="商品検索機能の切り替え"
+                  onClick={toggleSearch}
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                    isSearchEnabled ? "bg-gray-900" : "bg-gray-200"
+                  }`}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      isSearchEnabled ? "translate-x-5" : "translate-x-0"
                     }`}
                   />
                 </button>
@@ -163,7 +212,7 @@ export function DemoSettingsPanel() {
         </span>
 
         {/* オプション有効時のアクティブドット */}
-        {isChatbotEnabled && (
+        {hasActiveOptions && (
           <span
             className={`w-2 h-2 rounded-full ${
               isOpen ? "bg-white" : "bg-gray-900 group-hover:bg-white"

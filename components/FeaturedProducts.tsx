@@ -1,12 +1,32 @@
 "use client";
 
+import { useState } from "react";
 import { products } from "@/data/products";
 import { ProductCard } from "./ProductCard";
 import { FadeInView } from "./FadeInView";
+import {
+  ProductSearchFilter,
+  filterProducts,
+} from "./ProductSearchFilter";
+import { useDemoOptions } from "@/context/DemoOptionsContext";
+import { Category } from "@/types";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 
 export function FeaturedProducts() {
-  const featuredProducts = products.filter((p) => p.featured).slice(0, 4);
+  const { isSearchEnabled } = useDemoOptions();
+  const [selectedCategory, setSelectedCategory] = useState<Category>("all");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const defaultFeatured = products.filter((p) => p.featured).slice(0, 4);
+  const displayedProducts = isSearchEnabled
+    ? filterProducts(products, selectedCategory, searchQuery)
+    : defaultFeatured;
+
+  const handleResetFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("all");
+  };
 
   return (
     <section className="py-20 sm:py-28 px-4 bg-background-light">
@@ -14,19 +34,51 @@ export function FeaturedProducts() {
         <FadeInView>
           <div className="text-center mb-12 sm:mb-16">
             <p className="text-xs tracking-[0.4em] text-text-muted mb-3">
-              FEATURED
+              {isSearchEnabled ? "PRODUCTS" : "FEATURED"}
             </p>
             <h2 className="text-2xl sm:text-3xl font-light tracking-wider text-accent">
-              おすすめアイテム
+              {isSearchEnabled ? "商品検索・一覧" : "おすすめアイテム"}
             </h2>
           </div>
         </FadeInView>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          {featuredProducts.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} />
-          ))}
-        </div>
+        {/* 検索バー ＆ カテゴリ絞り込み（オプションON時のみ表示） */}
+        <AnimatePresence>
+          {isSearchEnabled && (
+            <ProductSearchFilter
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+              layoutId="homePageCategory"
+            />
+          )}
+        </AnimatePresence>
+
+        {displayedProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            {displayedProducts.map((product, index) => (
+              <ProductCard key={product.id} product={product} index={index} />
+            ))}
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="py-16 text-center"
+          >
+            <p className="text-base text-gray-600 tracking-wider mb-4">
+              該当する商品が見つかりません
+            </p>
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="text-xs tracking-wider text-gray-900 border-b border-gray-900 pb-0.5 hover:text-gray-600 hover:border-gray-600 transition-colors cursor-pointer"
+            >
+              検索条件をリセット
+            </button>
+          </motion.div>
+        )}
 
         <FadeInView delay={0.4}>
           <div className="text-center mt-12 sm:mt-16">

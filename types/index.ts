@@ -15,6 +15,7 @@ export interface Product {
   images: string[];
   variants: ProductVariant[];
   featured: boolean;
+  isNew?: boolean;
 }
 
 /** カート内アイテム */
@@ -26,12 +27,21 @@ export interface CartItem {
 }
 
 /** カテゴリ */
-export type Category = "all" | "tops" | "suits" | "accessories" | "outerwear";
+export type Category =
+  | "all"
+  | "new"
+  | "featured"
+  | "tops"
+  | "outerwear"
+  | "suits"
+  | "accessories";
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   all: "すべて",
+  new: "新作",
+  featured: "おすすめ",
   tops: "トップス",
+  outerwear: "アウター",
   suits: "スーツ",
   accessories: "アクセサリー",
-  outerwear: "アウター",
 };
