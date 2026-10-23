@@ -16,6 +16,9 @@ interface DemoOptionsContextType {
   isUgcEnabled: boolean;
   setIsUgcEnabled: (enabled: boolean) => void;
   toggleUgc: () => void;
+  isAnalyticsEnabled: boolean;
+  setIsAnalyticsEnabled: (enabled: boolean) => void;
+  toggleAnalytics: () => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   selectedCategory: Category;
@@ -29,6 +32,7 @@ export function DemoOptionsProvider({ children }: { children: ReactNode }) {
   const [isSearchEnabled, setIsSearchEnabled] = useState<boolean>(false);
   const [isSocialEnabled, setIsSocialEnabled] = useState<boolean>(false);
   const [isUgcEnabled, setIsUgcEnabled] = useState<boolean>(false);
+  const [isAnalyticsEnabled, setIsAnalyticsEnabled] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<Category>("all");
 
@@ -48,6 +52,10 @@ export function DemoOptionsProvider({ children }: { children: ReactNode }) {
     setIsUgcEnabled((prev) => !prev);
   }, []);
 
+  const toggleAnalytics = useCallback(() => {
+    setIsAnalyticsEnabled((prev) => !prev);
+  }, []);
+
   return (
     <DemoOptionsContext.Provider
       value={{
@@ -63,6 +71,9 @@ export function DemoOptionsProvider({ children }: { children: ReactNode }) {
         isUgcEnabled,
         setIsUgcEnabled,
         toggleUgc,
+        isAnalyticsEnabled,
+        setIsAnalyticsEnabled,
+        toggleAnalytics,
         searchQuery,
         setSearchQuery,
         selectedCategory,

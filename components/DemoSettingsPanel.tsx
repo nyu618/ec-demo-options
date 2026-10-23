@@ -1,11 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDemoOptions } from "@/context/DemoOptionsContext";
 
 export function DemoSettingsPanel() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
   const {
     isChatbotEnabled,
     toggleChatbot,
@@ -15,11 +18,19 @@ export function DemoSettingsPanel() {
     toggleSocial,
     isUgcEnabled,
     toggleUgc,
+    isAnalyticsEnabled,
+    toggleAnalytics,
   } = useDemoOptions();
   const panelRef = useRef<HTMLDivElement>(null);
 
   const hasActiveOptions =
-    isChatbotEnabled || isSearchEnabled || isSocialEnabled || isUgcEnabled;
+    isChatbotEnabled ||
+    isSearchEnabled ||
+    isSocialEnabled ||
+    isUgcEnabled ||
+    isAnalyticsEnabled;
+
+  const isOnAnalyticsPage = pathname === "/analytics";
 
   // パネル外クリックで閉じる
   useEffect(() => {
@@ -41,7 +52,7 @@ export function DemoSettingsPanel() {
   }, [isOpen]);
 
   return (
-    <div ref={panelRef} className="fixed bottom-4 left-4 z-50">
+    <div ref={panelRef} className="fixed bottom-4 left-4 z-50 flex flex-col items-start gap-2.5">
       {/* ポップアップ設定パネル */}
       <AnimatePresence>
         {isOpen && (
@@ -50,7 +61,7 @@ export function DemoSettingsPanel() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute bottom-14 left-0 w-72 sm:w-80 bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-2xl overflow-hidden"
+            className="w-72 sm:w-80 bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-2xl overflow-hidden mb-1"
           >
             {/* パネルヘッダー */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50/60">
@@ -85,7 +96,7 @@ export function DemoSettingsPanel() {
             </div>
 
             {/* オプションリスト */}
-            <div className="p-5 divide-y divide-gray-100 max-h-[70vh] overflow-y-auto">
+            <div className="p-5 divide-y divide-gray-100 max-h-[65vh] overflow-y-auto">
               {/* オプション1: AIチャットボット機能 */}
               <div className="flex items-center justify-between gap-4 pb-4">
                 <div className="flex-1 min-w-0">
@@ -210,7 +221,7 @@ export function DemoSettingsPanel() {
               </div>
 
               {/* オプション4: UGC（購入者レビュー）連携 */}
-              <div className="flex items-center justify-between gap-4 pt-4">
+              <div className="flex items-center justify-between gap-4 py-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-gray-900">
@@ -249,6 +260,47 @@ export function DemoSettingsPanel() {
                   />
                 </button>
               </div>
+
+              {/* オプション5: サイト分析・レポート機能 */}
+              <div className="flex items-center justify-between gap-4 pt-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-900">
+                      サイト分析・レポート機能
+                    </span>
+                    <span
+                      className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${
+                        isAnalyticsEnabled
+                          ? "bg-gray-900 text-white"
+                          : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
+                      {isAnalyticsEnabled ? "ON" : "OFF"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                    アクセス・CVR・カート放棄率・AI改善提案の分析ダッシュボードを表示します
+                  </p>
+                </div>
+
+                {/* トグルスイッチ */}
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={isAnalyticsEnabled}
+                  aria-label="サイト分析・レポート機能の切り替え"
+                  onClick={toggleAnalytics}
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                    isAnalyticsEnabled ? "bg-gray-900" : "bg-gray-200"
+                  }`}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      isAnalyticsEnabled ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  />
+                </button>
+              </div>
             </div>
 
             {/* フッター注記 */}
@@ -261,13 +313,52 @@ export function DemoSettingsPanel() {
         )}
       </AnimatePresence>
 
+      {/* 📊 分析ダッシュボードへの導線フローティングボタン (isAnalyticsEnabledがONの時のみ表示) */}
+      <AnimatePresence>
+        {isAnalyticsEnabled && (
+          <motion.div
+            initial={{ opacity: 0, x: -16, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -16, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            <Link
+              href={isOnAnalyticsPage ? "/" : "/analytics"}
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-gray-900 text-white text-xs font-medium tracking-wider shadow-xl border border-gray-800 hover:bg-gray-800 hover:scale-103 active:scale-98 transition-all duration-200"
+            >
+              <span>📊</span>
+              <span>
+                {isOnAnalyticsPage
+                  ? "ショップ画面に戻る"
+                  : "分析ダッシュボードを見る"}
+              </span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-3.5 h-3.5 text-white/70"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                />
+              </svg>
+            </Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* 歯車アイコンボタン (Demo Settings) */}
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         aria-label="Demo Settings"
         aria-expanded={isOpen}
-        className={`group relative flex items-center gap-2 px-3.5 py-3 rounded-full border shadow-lg backdrop-blur-md transition-all duration-200 ${
+        className={`group relative flex items-center gap-2 px-3.5 py-3 rounded-full border shadow-lg backdrop-blur-md transition-all duration-200 cursor-pointer ${
           isOpen
             ? "bg-gray-900 text-white border-gray-900"
             : "bg-white/90 text-gray-900 border-gray-200 hover:bg-gray-900 hover:text-white hover:border-gray-900"
