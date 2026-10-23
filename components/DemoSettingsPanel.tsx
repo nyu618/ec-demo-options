@@ -145,7 +145,7 @@ export function DemoSettingsPanel() {
                     </span>
                   </div>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    商品一覧の上部に検索バーとカテゴリ絞り込みUIを表示します
+                    トップページおよび商品一覧に検索バーとカテゴリ絞り込みUIを表示します
                   </p>
                 </div>
 

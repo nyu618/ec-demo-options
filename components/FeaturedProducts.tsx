@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { products } from "@/data/products";
 import { ProductCard } from "./ProductCard";
 import { FadeInView } from "./FadeInView";
@@ -9,14 +8,17 @@ import {
   filterProducts,
 } from "./ProductSearchFilter";
 import { useDemoOptions } from "@/context/DemoOptionsContext";
-import { Category } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 
 export function FeaturedProducts() {
-  const { isSearchEnabled } = useDemoOptions();
-  const [selectedCategory, setSelectedCategory] = useState<Category>("all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const {
+    isSearchEnabled,
+    searchQuery,
+    setSearchQuery,
+    selectedCategory,
+    setSelectedCategory,
+  } = useDemoOptions();
 
   const defaultFeatured = products.filter((p) => p.featured).slice(0, 4);
   const displayedProducts = isSearchEnabled
@@ -29,15 +31,18 @@ export function FeaturedProducts() {
   };
 
   return (
-    <section className="py-20 sm:py-28 px-4 bg-background-light">
+    <section
+      id="products-search-section"
+      className="py-20 sm:py-28 px-4 bg-background-light scroll-mt-16"
+    >
       <div className="max-w-7xl mx-auto">
         <FadeInView>
           <div className="text-center mb-12 sm:mb-16">
             <p className="text-xs tracking-[0.4em] text-text-muted mb-3">
-              {isSearchEnabled ? "PRODUCTS" : "FEATURED"}
+              {isSearchEnabled ? "SEARCH & COLLECTION" : "FEATURED"}
             </p>
             <h2 className="text-2xl sm:text-3xl font-light tracking-wider text-accent">
-              {isSearchEnabled ? "商品検索・一覧" : "おすすめアイテム"}
+              {isSearchEnabled ? "商品を探す・おすすめ一覧" : "おすすめアイテム"}
             </h2>
           </div>
         </FadeInView>
@@ -56,11 +61,25 @@ export function FeaturedProducts() {
         </AnimatePresence>
 
         {displayedProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {displayedProducts.map((product, index) => (
-              <ProductCard key={product.id} product={product} index={index} />
-            ))}
-          </div>
+          <motion.div
+            layout
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8"
+          >
+            <AnimatePresence mode="popLayout">
+              {displayedProducts.map((product, index) => (
+                <motion.div
+                  key={product.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                >
+                  <ProductCard product={product} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         ) : (
           <motion.div
             initial={{ opacity: 0, y: 10 }}

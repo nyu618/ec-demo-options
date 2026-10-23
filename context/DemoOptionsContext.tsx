@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import { Category } from "@/types";
 
 interface DemoOptionsContextType {
   isChatbotEnabled: boolean;
@@ -15,6 +16,10 @@ interface DemoOptionsContextType {
   isUgcEnabled: boolean;
   setIsUgcEnabled: (enabled: boolean) => void;
   toggleUgc: () => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  selectedCategory: Category;
+  setSelectedCategory: (category: Category) => void;
 }
 
 const DemoOptionsContext = createContext<DemoOptionsContextType | undefined>(undefined);
@@ -24,6 +29,8 @@ export function DemoOptionsProvider({ children }: { children: ReactNode }) {
   const [isSearchEnabled, setIsSearchEnabled] = useState<boolean>(false);
   const [isSocialEnabled, setIsSocialEnabled] = useState<boolean>(false);
   const [isUgcEnabled, setIsUgcEnabled] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<Category>("all");
 
   const toggleChatbot = useCallback(() => {
     setIsChatbotEnabled((prev) => !prev);
@@ -56,6 +63,10 @@ export function DemoOptionsProvider({ children }: { children: ReactNode }) {
         isUgcEnabled,
         setIsUgcEnabled,
         toggleUgc,
+        searchQuery,
+        setSearchQuery,
+        selectedCategory,
+        setSelectedCategory,
       }}
     >
       {children}

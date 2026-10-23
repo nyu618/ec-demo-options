@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { products } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";
 import {
@@ -9,13 +8,16 @@ import {
 } from "@/components/ProductSearchFilter";
 import { FadeInView } from "@/components/FadeInView";
 import { useDemoOptions } from "@/context/DemoOptionsContext";
-import { Category } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function ProductsPage() {
-  const { isSearchEnabled } = useDemoOptions();
-  const [selectedCategory, setSelectedCategory] = useState<Category>("all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const {
+    isSearchEnabled,
+    searchQuery,
+    setSearchQuery,
+    selectedCategory,
+    setSelectedCategory,
+  } = useDemoOptions();
 
   const displayedProducts = isSearchEnabled
     ? filterProducts(products, selectedCategory, searchQuery)

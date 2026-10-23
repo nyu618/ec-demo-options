@@ -2,12 +2,17 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/context/CartContext";
+import { useDemoOptions } from "@/context/DemoOptionsContext";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const { totalItems, toggleCart } = useCart();
+  const { isSearchEnabled } = useDemoOptions();
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +21,17 @@ export function Header() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleSearchIconClick = () => {
+    if (pathname === "/") {
+      const el = document.getElementById("products-search-section");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+    }
+    router.push("/products");
+  };
 
   return (
     <header
@@ -35,7 +51,7 @@ export function Header() {
           </Link>
 
           {/* ナビゲーション + カート */}
-          <div className="flex items-center gap-6 sm:gap-8">
+          <div className="flex items-center gap-5 sm:gap-7">
             <nav className="hidden sm:flex items-center gap-8">
               <Link
                 href="/"
@@ -56,6 +72,36 @@ export function Header() {
                 PRODUCTS
               </Link>
             </nav>
+
+            {/* 検索アイコンボタン（商品検索オプションON時のみ表示） */}
+            <AnimatePresence>
+              {isSearchEnabled && (
+                <motion.button
+                  type="button"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  onClick={handleSearchIconClick}
+                  className="p-2 text-gray-900 hover:text-gray-600 transition-colors duration-200 cursor-pointer"
+                  aria-label="商品を検索"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                    />
+                  </svg>
+                </motion.button>
+              )}
+            </AnimatePresence>
 
             {/* アカウントアイコン */}
             <Link
