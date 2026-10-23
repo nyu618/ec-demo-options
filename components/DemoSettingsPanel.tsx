@@ -11,10 +11,13 @@ export function DemoSettingsPanel() {
     toggleChatbot,
     isSearchEnabled,
     toggleSearch,
+    isSocialEnabled,
+    toggleSocial,
   } = useDemoOptions();
   const panelRef = useRef<HTMLDivElement>(null);
 
-  const hasActiveOptions = isChatbotEnabled || isSearchEnabled;
+  const hasActiveOptions =
+    isChatbotEnabled || isSearchEnabled || isSocialEnabled;
 
   // パネル外クリックで閉じる
   useEffect(() => {
@@ -123,7 +126,7 @@ export function DemoSettingsPanel() {
               </div>
 
               {/* オプション2: 商品検索機能 */}
-              <div className="flex items-center justify-between gap-4 pt-4">
+              <div className="flex items-center justify-between gap-4 py-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-gray-900">
@@ -158,6 +161,47 @@ export function DemoSettingsPanel() {
                   <span
                     className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
                       isSearchEnabled ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {/* オプション3: SNS連携機能 */}
+              <div className="flex items-center justify-between gap-4 pt-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-900">
+                      SNS連携機能
+                    </span>
+                    <span
+                      className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${
+                        isSocialEnabled
+                          ? "bg-gray-900 text-white"
+                          : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
+                      {isSocialEnabled ? "ON" : "OFF"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                    トップページ下部にInstagram・Xの連携ギャラリーを表示します
+                  </p>
+                </div>
+
+                {/* トグルスイッチ */}
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={isSocialEnabled}
+                  aria-label="SNS連携機能の切り替え"
+                  onClick={toggleSocial}
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                    isSocialEnabled ? "bg-gray-900" : "bg-gray-200"
+                  }`}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      isSocialEnabled ? "translate-x-5" : "translate-x-0"
                     }`}
                   />
                 </button>

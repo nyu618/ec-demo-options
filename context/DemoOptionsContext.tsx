@@ -9,6 +9,9 @@ interface DemoOptionsContextType {
   isSearchEnabled: boolean;
   setIsSearchEnabled: (enabled: boolean) => void;
   toggleSearch: () => void;
+  isSocialEnabled: boolean;
+  setIsSocialEnabled: (enabled: boolean) => void;
+  toggleSocial: () => void;
 }
 
 const DemoOptionsContext = createContext<DemoOptionsContextType | undefined>(undefined);
@@ -16,6 +19,7 @@ const DemoOptionsContext = createContext<DemoOptionsContextType | undefined>(und
 export function DemoOptionsProvider({ children }: { children: ReactNode }) {
   const [isChatbotEnabled, setIsChatbotEnabled] = useState<boolean>(false);
   const [isSearchEnabled, setIsSearchEnabled] = useState<boolean>(false);
+  const [isSocialEnabled, setIsSocialEnabled] = useState<boolean>(false);
 
   const toggleChatbot = useCallback(() => {
     setIsChatbotEnabled((prev) => !prev);
@@ -23,6 +27,10 @@ export function DemoOptionsProvider({ children }: { children: ReactNode }) {
 
   const toggleSearch = useCallback(() => {
     setIsSearchEnabled((prev) => !prev);
+  }, []);
+
+  const toggleSocial = useCallback(() => {
+    setIsSocialEnabled((prev) => !prev);
   }, []);
 
   return (
@@ -34,6 +42,9 @@ export function DemoOptionsProvider({ children }: { children: ReactNode }) {
         isSearchEnabled,
         setIsSearchEnabled,
         toggleSearch,
+        isSocialEnabled,
+        setIsSocialEnabled,
+        toggleSocial,
       }}
     >
       {children}

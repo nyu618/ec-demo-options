@@ -2,6 +2,7 @@ import Link from "next/link";
 import { HeroSection } from "@/components/HeroSection";
 import { ConceptSection } from "@/components/ConceptSection";
 import { FeaturedProducts } from "@/components/FeaturedProducts";
+import { SocialGallerySection } from "@/components/SocialGallerySection";
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <HeroSection />
       <ConceptSection />
       <FeaturedProducts />
+      <SocialGallerySection />
 
       {/* フッター */}
       <footer className="bg-accent text-white">
