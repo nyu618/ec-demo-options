@@ -3,7 +3,10 @@ import { Inter, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { CartDrawer } from "@/components/CartDrawer";
+import { DemoSettingsPanel } from "@/components/DemoSettingsPanel";
+import { ChatbotWidget } from "@/components/ChatbotWidget";
 import { CartProvider } from "@/context/CartContext";
+import { DemoOptionsProvider } from "@/context/DemoOptionsContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -30,11 +33,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${notoSansJP.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
-        <CartProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <CartDrawer />
-        </CartProvider>
+        <DemoOptionsProvider>
+          <CartProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <CartDrawer />
+            <DemoSettingsPanel />
+            <ChatbotWidget />
+          </CartProvider>
+        </DemoOptionsProvider>
       </body>
     </html>
   );
