@@ -5,6 +5,7 @@ import { products } from "@/data/products";
 import { ProductGallery } from "@/components/ProductGallery";
 import { StickyAddToCart } from "@/components/StickyAddToCart";
 import { FadeInView } from "@/components/FadeInView";
+import { UgcReviewsSection } from "@/components/UgcReviewsSection";
 import { useCart } from "@/context/CartContext";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -253,6 +254,9 @@ export default function ProductDetailPage({ params }: PageProps) {
               </div>
             </FadeInView>
           </div>
+
+          {/* UGC（購入者レビュー）連携セクション（オプションON時のみ表示） */}
+          <UgcReviewsSection productName={product.name} />
         </div>
       </div>
 

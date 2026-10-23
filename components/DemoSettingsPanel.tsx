@@ -13,11 +13,13 @@ export function DemoSettingsPanel() {
     toggleSearch,
     isSocialEnabled,
     toggleSocial,
+    isUgcEnabled,
+    toggleUgc,
   } = useDemoOptions();
   const panelRef = useRef<HTMLDivElement>(null);
 
   const hasActiveOptions =
-    isChatbotEnabled || isSearchEnabled || isSocialEnabled;
+    isChatbotEnabled || isSearchEnabled || isSocialEnabled || isUgcEnabled;
 
   // パネル外クリックで閉じる
   useEffect(() => {
@@ -83,7 +85,7 @@ export function DemoSettingsPanel() {
             </div>
 
             {/* オプションリスト */}
-            <div className="p-5 divide-y divide-gray-100">
+            <div className="p-5 divide-y divide-gray-100 max-h-[70vh] overflow-y-auto">
               {/* オプション1: AIチャットボット機能 */}
               <div className="flex items-center justify-between gap-4 pb-4">
                 <div className="flex-1 min-w-0">
@@ -167,7 +169,7 @@ export function DemoSettingsPanel() {
               </div>
 
               {/* オプション3: SNS連携機能 */}
-              <div className="flex items-center justify-between gap-4 pt-4">
+              <div className="flex items-center justify-between gap-4 py-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-gray-900">
@@ -202,6 +204,47 @@ export function DemoSettingsPanel() {
                   <span
                     className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
                       isSocialEnabled ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {/* オプション4: UGC（購入者レビュー）連携 */}
+              <div className="flex items-center justify-between gap-4 pt-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-900">
+                      UGC（購入者レビュー）連携
+                    </span>
+                    <span
+                      className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${
+                        isUgcEnabled
+                          ? "bg-gray-900 text-white"
+                          : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
+                      {isUgcEnabled ? "ON" : "OFF"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                    商品詳細ページ下部に購入者のInstagram投稿レビューを表示します
+                  </p>
+                </div>
+
+                {/* トグルスイッチ */}
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={isUgcEnabled}
+                  aria-label="UGC（購入者レビュー）連携の切り替え"
+                  onClick={toggleUgc}
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                    isUgcEnabled ? "bg-gray-900" : "bg-gray-200"
+                  }`}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      isUgcEnabled ? "translate-x-5" : "translate-x-0"
                     }`}
                   />
                 </button>

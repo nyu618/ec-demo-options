@@ -12,6 +12,9 @@ interface DemoOptionsContextType {
   isSocialEnabled: boolean;
   setIsSocialEnabled: (enabled: boolean) => void;
   toggleSocial: () => void;
+  isUgcEnabled: boolean;
+  setIsUgcEnabled: (enabled: boolean) => void;
+  toggleUgc: () => void;
 }
 
 const DemoOptionsContext = createContext<DemoOptionsContextType | undefined>(undefined);
@@ -20,6 +23,7 @@ export function DemoOptionsProvider({ children }: { children: ReactNode }) {
   const [isChatbotEnabled, setIsChatbotEnabled] = useState<boolean>(false);
   const [isSearchEnabled, setIsSearchEnabled] = useState<boolean>(false);
   const [isSocialEnabled, setIsSocialEnabled] = useState<boolean>(false);
+  const [isUgcEnabled, setIsUgcEnabled] = useState<boolean>(false);
 
   const toggleChatbot = useCallback(() => {
     setIsChatbotEnabled((prev) => !prev);
@@ -31,6 +35,10 @@ export function DemoOptionsProvider({ children }: { children: ReactNode }) {
 
   const toggleSocial = useCallback(() => {
     setIsSocialEnabled((prev) => !prev);
+  }, []);
+
+  const toggleUgc = useCallback(() => {
+    setIsUgcEnabled((prev) => !prev);
   }, []);
 
   return (
@@ -45,6 +53,9 @@ export function DemoOptionsProvider({ children }: { children: ReactNode }) {
         isSocialEnabled,
         setIsSocialEnabled,
         toggleSocial,
+        isUgcEnabled,
+        setIsUgcEnabled,
+        toggleUgc,
       }}
     >
       {children}
