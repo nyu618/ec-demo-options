@@ -7,10 +7,25 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/context/CartContext";
 import { useDemoOptions } from "@/context/DemoOptionsContext";
 
+const MOBILE_NAV_LINKS = [
+  { href: "/", labelJa: "ホーム", labelEn: "HOME" },
+  { href: "/about", labelJa: "私たちについて", labelEn: "ABOUT" },
+  { href: "/products", labelJa: "商品一覧", labelEn: "PRODUCTS" },
+  { href: "/faq", labelJa: "よくある質問", labelEn: "FAQ" },
+  { href: "/contact", labelJa: "お問い合わせ", labelEn: "CONTACT" },
+];
+
+const MOBILE_ACCOUNT_LINKS = [
+  { href: "/mypage", label: "マイページ" },
+  { href: "/login", label: "ログイン" },
+  { href: "/register", label: "新規会員登録" },
+];
+
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { totalItems, toggleCart } = useCart();
-  const { isSearchEnabled } = useDemoOptions();
+  const { isSearchEnabled, isAnalyticsEnabled } = useDemoOptions();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -23,6 +38,7 @@ export function Header() {
   }, []);
 
   const handleSearchIconClick = () => {
+    setMobileMenuOpen(false);
     if (pathname === "/") {
       const el = document.getElementById("products-search-section");
       if (el) {
@@ -36,22 +52,26 @@ export function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100"
+        scrolled || mobileMenuOpen
+          ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100"
           : "bg-white/80 backdrop-blur-md"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* ロゴ */}
-          <Link href="/" className="flex items-center">
+          <Link
+            href="/"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center"
+          >
             <span className="text-xl sm:text-2xl font-bold tracking-[0.15em] text-gray-900">
               DEMO
             </span>
           </Link>
 
-          {/* ナビゲーション + カート */}
-          <div className="flex items-center gap-5 sm:gap-7">
+          {/* ナビゲーション + アイコン群 */}
+          <div className="flex items-center gap-3 sm:gap-7">
             <nav className="hidden sm:flex items-center gap-8">
               <Link
                 href="/"
@@ -70,6 +90,18 @@ export function Header() {
                 className="text-sm tracking-wider text-gray-600 hover:text-gray-900 transition-colors duration-200"
               >
                 PRODUCTS
+              </Link>
+              <Link
+                href="/faq"
+                className="text-sm tracking-wider text-gray-600 hover:text-gray-900 transition-colors duration-200"
+              >
+                FAQ
+              </Link>
+              <Link
+                href="/contact"
+                className="text-sm tracking-wider text-gray-600 hover:text-gray-900 transition-colors duration-200"
+              >
+                CONTACT
               </Link>
             </nav>
 
@@ -106,6 +138,7 @@ export function Header() {
             {/* アカウントアイコン */}
             <Link
               href="/login"
+              onClick={() => setMobileMenuOpen(false)}
               className="p-2 text-gray-900 hover:text-gray-600 transition-colors duration-200"
               aria-label="ログイン"
             >
@@ -127,8 +160,11 @@ export function Header() {
 
             {/* カートボタン */}
             <button
-              onClick={toggleCart}
-              className="relative p-2 text-gray-900 hover:text-gray-600 transition-colors duration-200"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                toggleCart();
+              }}
+              className="relative p-2 text-gray-900 hover:text-gray-600 transition-colors duration-200 cursor-pointer"
               aria-label="カートを開く"
             >
               <svg
@@ -160,30 +196,123 @@ export function Header() {
               </AnimatePresence>
             </button>
 
-            {/* モバイルメニュー */}
-            <Link
-              href="/products"
-              className="sm:hidden p-2 text-gray-900"
-              aria-label="商品一覧"
+            {/* モバイルハンバーガーメニュー開閉ボタン */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              className="sm:hidden p-2 text-gray-900 hover:text-gray-600 transition-colors cursor-pointer"
+              aria-label={mobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
+              aria-expanded={mobileMenuOpen}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                />
-              </svg>
-            </Link>
+              {mobileMenuOpen ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
       </div>
+
+      {/* モバイルナビゲーションメニュー */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="sm:hidden bg-white border-t border-gray-100 overflow-hidden shadow-xl"
+          >
+            <div className="px-6 py-6 space-y-6">
+              {/* メインページリンク */}
+              <nav className="space-y-1">
+                <p className="text-[10px] font-semibold tracking-[0.25em] text-gray-400 uppercase mb-2">
+                  NAVIGATION
+                </p>
+                {MOBILE_NAV_LINKS.map((link) => {
+                  const isActive = pathname === link.href;
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center justify-between py-2.5 text-sm border-b border-gray-50 transition-colors ${
+                        isActive
+                          ? "text-gray-900 font-semibold"
+                          : "text-gray-600 hover:text-gray-900"
+                      }`}
+                    >
+                      <span>{link.labelJa}</span>
+                      <span className="text-[11px] tracking-widest text-gray-400">
+                        {link.labelEn}
+                      </span>
+                    </Link>
+                  );
+                })}
+
+                {isAnalyticsEnabled && (
+                  <Link
+                    href="/analytics"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-between py-2.5 text-sm border-b border-gray-50 text-gray-900 font-medium"
+                  >
+                    <span>📊 サイト分析ダッシュボード</span>
+                    <span className="text-[11px] tracking-widest text-gray-400">
+                      ANALYTICS
+                    </span>
+                  </Link>
+                )}
+              </nav>
+
+              {/* アカウント関連リンク */}
+              <div>
+                <p className="text-[10px] font-semibold tracking-[0.25em] text-gray-400 uppercase mb-2.5">
+                  ACCOUNT
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  {MOBILE_ACCOUNT_LINKS.map((acc) => (
+                    <Link
+                      key={acc.href}
+                      href={acc.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="py-2.5 px-2 rounded-lg bg-gray-50 hover:bg-gray-100 text-center text-xs font-medium text-gray-800 transition-colors"
+                    >
+                      {acc.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

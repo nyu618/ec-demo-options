@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, FormEvent } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDemoOptions } from "@/context/DemoOptionsContext";
 
@@ -40,8 +41,12 @@ function ChatbotContainer({ messages, setMessages }: ChatbotContainerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const pathname = usePathname();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const timeoutIdsRef = useRef<NodeJS.Timeout[]>([]);
+
+  const isProductDetailPage =
+    pathname.startsWith("/products/") && pathname !== "/products";
 
   // メッセージ追加時やウィンドウオープン時に最下部へスクロール
   useEffect(() => {
@@ -92,7 +97,9 @@ function ChatbotContainer({ messages, setMessages }: ChatbotContainerProps) {
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9, y: 10 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="fixed bottom-4 right-4 z-50"
+      className={`fixed right-3 sm:right-4 z-50 transition-all duration-300 ${
+        isProductDetailPage ? "bottom-20 md:bottom-4" : "bottom-4"
+      }`}
     >
       {/* チャットウィンドウ */}
       <AnimatePresence>
@@ -102,7 +109,7 @@ function ChatbotContainer({ messages, setMessages }: ChatbotContainerProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute bottom-16 right-0 w-[calc(100vw-2rem)] sm:w-[360px] h-[460px] max-h-[calc(100vh-7rem)] bg-white border border-gray-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            className="absolute bottom-15 right-0 w-[calc(100vw-1.5rem)] sm:w-[360px] h-[440px] max-h-[calc(100vh-8rem)] bg-white border border-gray-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           >
             {/* ヘッダー */}
             <div className="flex items-center justify-between px-5 py-4 bg-gray-900 text-white">
@@ -241,7 +248,7 @@ function ChatbotContainer({ messages, setMessages }: ChatbotContainerProps) {
         onClick={() => setIsOpen((prev) => !prev)}
         aria-label={isOpen ? "チャットを閉じる" : "チャットを開く"}
         aria-expanded={isOpen}
-        className="w-13 h-13 rounded-full bg-gray-900 text-white shadow-xl hover:bg-gray-800 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer"
+        className="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-gray-900 text-white shadow-xl hover:bg-gray-800 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer"
       >
         {isOpen ? (
           <svg
