@@ -313,19 +313,22 @@ export function DemoSettingsPanel() {
         )}
       </AnimatePresence>
 
-      {/* 📊 分析ダッシュボードへの導線フローティングボタン (isAnalyticsEnabledがONの時のみ表示) */}
+      {/* 📊 分析ダッシュボードへの導線フローティングボタン (画面右下・isAnalyticsEnabledがONの時のみ表示) */}
       <AnimatePresence>
         {isAnalyticsEnabled && (
           <motion.div
-            initial={{ opacity: 0, x: -16, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -16, scale: 0.95 }}
+            initial={{ opacity: 0, y: 12, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 12, scale: 0.95 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
+            className={`fixed bottom-4 z-40 transition-all duration-300 ${
+              isChatbotEnabled ? "right-20" : "right-4"
+            }`}
           >
             <Link
               href={isOnAnalyticsPage ? "/" : "/analytics"}
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-gray-900 text-white text-xs font-medium tracking-wider shadow-xl border border-gray-800 hover:bg-gray-800 hover:scale-103 active:scale-98 transition-all duration-200"
+              className="flex items-center gap-2 px-4 py-3 rounded-full bg-gray-900 text-white text-xs font-medium tracking-wider shadow-xl border border-gray-800 hover:bg-gray-800 hover:scale-103 active:scale-98 transition-all duration-200"
             >
               <span>📊</span>
               <span>
